@@ -19,8 +19,11 @@ export class TestsController {
   @UsePipes(ValidationPipe)
   @UseGuards(JwtAuthGuard)
   @Get('/testAuth')
-  async testAuth() {
+  async testAuth(@Req() request: Request) {
     const result = { message: 'very nice!' };
+
+    printManualLog('authToken cookie get by /testAuth:');
+    console.log(request.signedCookies['authToken']);
 
     return result;
   }
