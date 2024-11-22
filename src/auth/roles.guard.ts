@@ -30,12 +30,14 @@ export class RolesGuard implements CanActivate {
         return true;
       }
 
-      const authToken = req.signedCookies['authToken'];
+      const authHeader = req.headers.authorization;
+      const bearer = authHeader.split(' ')[0];
+      const token = authHeader.split(' ')[1];
 
-      if (!authToken) {
+      if (bearer !== 'Bearer' || !token) {
         throw new UnauthorizedException();
       } else {
-        const user = this.jwtService.verify(authToken, {
+        const user = this.jwtService.verify(token, {
           secret: process.env.JWT_PRIVATE_KEY,
         });
 
