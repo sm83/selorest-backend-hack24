@@ -9,8 +9,19 @@ async function start() {
 
   const app = await NestFactory.create(AppModule);
 
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://23.137.250.242:3000',
+  ];
+
   app.enableCors({
-    origin: '*',
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: 'GET,POST,PUT,DELETE,UPDATE',
     allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
