@@ -1,0 +1,38 @@
+services:
+  main:
+    container_name: main
+    build:
+      context: .
+    volumes:
+      - .:/app
+    ports:
+      - 55575:55575
+    networks:
+      - my-network
+    command: npm run start
+
+    depends_on:
+      - postgres
+    restart: always
+
+  postgres:
+    container_name: postgres
+    image: postgres:14
+    env_file:
+      - .env.production
+    environment:
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - 5439:5432
+    networks:
+      - my-network
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  pgdata:
+
+networks:
+  my-network:
+    driver: bridge
