@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
+import { printManualLog } from 'src/utils/manualLog';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -18,6 +19,8 @@ export class JwtAuthGuard implements CanActivate {
 
     try {
       const authToken = req.signedCookies['authToken'];
+      printManualLog('auth token in jwt-guard');
+      console.log(authToken);
 
       if (!authToken) {
         throw new UnauthorizedException();

@@ -28,7 +28,7 @@ export class AuthController {
       .status(200)
       .cookie('authToken', result.token, {
         signed: true,
-        secure: true,
+        secure: false,
         maxAge: 604800000, // its miliseconds!
         httpOnly: true,
       })
@@ -49,7 +49,7 @@ export class AuthController {
       .status(201)
       .cookie('authToken', result.token, {
         signed: true,
-        secure: true,
+        secure: false,
         maxAge: 604800000, // its miliseconds!
         httpOnly: true,
       })
