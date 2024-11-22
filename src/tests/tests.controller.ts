@@ -25,7 +25,7 @@ export class TestsController {
     return result;
   }
 
-  @ApiOperation({ summary: 'Тестирование авторизации по токену' })
+  @ApiOperation({ summary: 'Тестирование cookie' })
   @ApiResponse({ status: 200 })
   @UsePipes(ValidationPipe)
   @Get('/testCookie')
