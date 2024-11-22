@@ -11,12 +11,14 @@ import * as bcryptjs from 'bcryptjs';
 import { UserCreateDto } from 'src/users/dto/user-create.dto';
 import { User } from 'src/users/users.model';
 import cryptedError from 'src/utils/throwError';
+import { ProfilesService } from 'src/profiles/profiles.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private profilesService: ProfilesService,
   ) {}
 
   // validation
@@ -106,6 +108,11 @@ export class AuthService {
         const generatedToken = await this.generateToken(user);
         if (generatedToken instanceof HttpException) {
           return generatedToken as HttpException;
+        }
+
+        const profile = this.profilesService.createProfile(user.id);
+        if (profile instanceof HttpException) {
+          return profile as HttpException;
         }
 
         return { token: generatedToken, id: user.id };

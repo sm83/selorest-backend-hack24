@@ -6,12 +6,14 @@ import * as bcryptjs from 'bcryptjs';
 import { RolesService } from 'src/roles/roles.service';
 import { UserAddRoleDto } from './dto/user-addRole.dto';
 import cryptedError from 'src/utils/throwError';
+import { ProfilesService } from 'src/profiles/profiles.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User) private userRepository: typeof User,
     private roleService: RolesService,
+    private profilesService: ProfilesService,
   ) {}
 
   // creating admin user
@@ -31,6 +33,11 @@ export class UsersService {
 
       await adminUser.$set('roles', [role.id]);
       adminUser.roles = [role];
+
+      const profile = this.profilesService.createProfile(adminUser.id);
+      if (profile instanceof HttpException) {
+        return profile as HttpException;
+      }
 
       return adminUser;
     } catch (error) {
