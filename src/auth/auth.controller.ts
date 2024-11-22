@@ -4,6 +4,7 @@ import { UserCreateDto } from 'src/users/dto/user-create.dto';
 import { AuthService } from './auth.service';
 import { User } from 'src/users/users.model';
 import { Response } from 'express';
+import { printManualLog } from 'src/utils/manualLog';
 
 @ApiTags('Авторизация')
 @Controller('auth')
@@ -19,6 +20,9 @@ export class AuthController {
     if (result instanceof HttpException) {
       throw result;
     }
+
+    printManualLog('result.token');
+    console.log(result.token);
 
     response
       .status(200)
