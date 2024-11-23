@@ -110,8 +110,6 @@ export class CategoriesService {
         categoryPriority: 'primary',
       });
 
-      console.log(result);
-
       if (result instanceof HttpException) {
         return result;
       }
