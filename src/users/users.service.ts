@@ -9,6 +9,7 @@ import cryptedError from 'src/utils/throwError';
 import { ProfilesService } from 'src/profiles/profiles.service';
 import { CategoriesService } from 'src/categories/categories.service';
 import { WalletsService } from 'src/wallets/wallets.service';
+import { printManualLog } from 'src/utils/manualLog';
 
 @Injectable()
 export class UsersService {
@@ -83,9 +84,13 @@ export class UsersService {
         return profile as HttpException;
       }
 
+      printManualLog('user done');
+
       await this.categoriesService.createDefaultCategories(user.id);
+      printManualLog('categories done');
 
       await this.walletsService.createInitialWalletsForUser(user.id);
+      printManualLog('wallets done');
 
       return user;
     } catch (error) {

@@ -8,11 +8,12 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
+import { Currency } from 'src/currencies/currencies.model';
 import { User } from 'src/users/users.model';
 
 interface WalletCreationAttribute {
   userId: string;
-  currencyName: string;
+  currencyId: number;
   balance: number;
   walletType: 'card' | 'cash';
   walletName: string;
@@ -30,12 +31,6 @@ export class Wallet extends Model<Wallet, WalletCreationAttribute> {
     primaryKey: true,
   })
   id: string;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  currencyName: string;
 
   @Column({
     type: DataType.FLOAT,
@@ -67,6 +62,13 @@ export class Wallet extends Model<Wallet, WalletCreationAttribute> {
     allowNull: false,
   })
   userId: string;
+
+  @ForeignKey(() => Currency)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  currency: number;
 
   @BelongsTo(() => User)
   user: User;

@@ -8,11 +8,15 @@ import {
   BelongsTo,
   ForeignKey,
 } from 'sequelize-typescript';
+import { Category } from 'src/categories/categories.model';
+import { Currency } from 'src/currencies/currencies.model';
 import { Wallet } from 'src/wallets/wallets.model';
 
 interface TransactionCreationAttribute {
-  currency: string;
-  balance: number;
+  amount: number;
+  type: 'add' | 'subtract';
+  currencyId: number;
+  categoryId: number;
   walletId: string;
 }
 
@@ -33,21 +37,33 @@ export class Transaction extends Model<
   })
   id: string;
 
-  @ApiProperty({
-    example: '3f9bb935-90eb-42cb-a391-732af255fbf4',
-    description: 'Уникальный идентификатор',
-  })
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  currency: string;
-
   @Column({
     type: DataType.FLOAT,
     allowNull: false,
   })
-  balance: number;
+  amount: number;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  type: 'add' | 'subtract';
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  deleted: boolean;
+
+  @ForeignKey(() => Currency)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  currencyId: number;
+
+  @BelongsTo(() => Currency)
+  currency: Currency;
 
   @ForeignKey(() => Wallet)
   @Column({
@@ -58,4 +74,14 @@ export class Transaction extends Model<
 
   @BelongsTo(() => Wallet)
   wallet: Wallet;
+
+  @ForeignKey(() => Category)
+  @Column({
+    type: DataType.BIGINT,
+    allowNull: false,
+  })
+  categoryId: number;
+
+  @BelongsTo(() => Category)
+  category: Category;
 }

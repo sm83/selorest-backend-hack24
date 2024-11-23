@@ -10,12 +10,12 @@ export class WalletCreateDto {
   })
   readonly userId: string;
 
-  @IsString({ message: 'wallet-create: currency: Должно быть строкой' })
+  @IsNumber({}, { message: 'wallet-create: currency: Должно быть числом' })
   @ApiProperty({
-    example: 'rubles',
-    description: 'Валюта',
+    example: '1',
+    description: 'Идентификатор валюты',
   })
-  readonly currencyName: string;
+  readonly currency: number;
 
   @IsNumber({}, { message: 'wallet-create: balance: Должно быть числом' })
   @ApiProperty({
@@ -34,10 +34,7 @@ export class WalletCreateDto {
   })
   readonly walletType: 'cash' | 'card';
 
-  @IsString({ message: 'wallet-create: walletType: Должно быть строкой' })
-  @IsIn(['cash', 'card'], {
-    message: 'wallet-create: walletType: Должно быть cash либо card',
-  })
+  @IsString({ message: 'wallet-create: walletName: Должно быть строкой' })
   @ApiProperty({
     example: 'Карта Сбербанк',
     description: 'Пользовательское название кошелька',

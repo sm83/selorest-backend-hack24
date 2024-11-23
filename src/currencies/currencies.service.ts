@@ -32,7 +32,7 @@ export class CurrenciesService {
     }
   }
 
-  async getCurrencyById(id: string) {
+  async getCurrencyById(id: number) {
     try {
       const currency = await this.currenciesRepository.findByPk(id);
 

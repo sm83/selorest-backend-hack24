@@ -11,6 +11,8 @@ import { Category } from './categories.model';
 import { UsersService } from 'src/users/users.service';
 import cryptedError from 'src/utils/throwError';
 import { CategoryCreateDto } from './dto/category-create.dto';
+import { CategoryChangeBalanceDto } from './dto/category-changeBalance.dto';
+import { printManualLog } from 'src/utils/manualLog';
 
 @Injectable()
 export class CategoriesService {
@@ -60,7 +62,7 @@ export class CategoriesService {
     }
   }
 
-  async getCategoryById(id: string) {
+  async getCategoryById(id: number) {
     try {
       const category = await this.categoryRepository.findByPk(id);
 
@@ -98,59 +100,120 @@ export class CategoriesService {
         return user as HttpException;
       }
 
-      await this.createCategory({
+      printManualLog('here');
+
+      const result = await this.createCategory({
         userId,
+        currency: 1,
+        balance: 0,
         categoryName: 'Цели',
         categoryPriority: 'primary',
       });
 
+      console.log(result);
+
+      if (result instanceof HttpException) {
+        return result;
+      }
+
       await this.createCategory({
         userId,
+        currency: 1,
+        balance: 0,
         categoryName: 'Обязательные траты',
         categoryPriority: 'primary',
       });
 
       await this.createCategory({
         userId,
+        currency: 1,
+        balance: 0,
         categoryName: 'Продукты',
         categoryPriority: 'secondary',
       });
 
       await this.createCategory({
         userId,
+        currency: 1,
+        balance: 0,
         categoryName: 'Здоровье',
         categoryPriority: 'secondary',
       });
 
       await this.createCategory({
         userId,
+        currency: 1,
+        balance: 0,
         categoryName: 'Семья',
         categoryPriority: 'secondary',
       });
 
       await this.createCategory({
         userId,
+        currency: 1,
+        balance: 0,
         categoryName: 'Транспорт',
         categoryPriority: 'secondary',
       });
 
       await this.createCategory({
         userId,
+        currency: 1,
+        balance: 0,
         categoryName: 'Покупки',
         categoryPriority: 'secondary',
       });
 
       await this.createCategory({
         userId,
+        currency: 1,
+        balance: 0,
         categoryName: 'Кафе',
         categoryPriority: 'other',
       });
 
       await this.createCategory({
         userId,
+        currency: 1,
+        balance: 0,
         categoryName: 'Досуг',
         categoryPriority: 'other',
       });
+
+      printManualLog('Categories for user: ' + userId + ' created');
+    } catch (error) {
+      return cryptedError(error);
+    }
+  }
+
+  async changeCategoryBalance(dto: CategoryChangeBalanceDto) {
+    try {
+      const category = await this.categoryRepository.findOne({
+        where: { id: dto.categoryId },
+      });
+
+      if (category instanceof HttpException) {
+        return category as HttpException;
+      }
+
+      if (category.deleted) {
+        return new HttpException('Wallet was deleted.', HttpStatus.GONE);
+      }
+
+      if (category.id !== String(dto.categoryId)) {
+        return new HttpException(
+          'Currencies are diferent.',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      if (dto.type === 'add') {
+        category.balance += dto.amount;
+      } else {
+        category.balance -= dto.amount;
+      }
+
+      return await category.save();
     } catch (error) {
       return cryptedError(error);
     }
