@@ -8,6 +8,7 @@ import { UserAddRoleDto } from './dto/user-addRole.dto';
 import cryptedError from 'src/utils/throwError';
 import { ProfilesService } from 'src/profiles/profiles.service';
 import { CategoriesService } from 'src/categories/categories.service';
+import { WalletsService } from 'src/wallets/wallets.service';
 
 @Injectable()
 export class UsersService {
@@ -16,6 +17,7 @@ export class UsersService {
     private roleService: RolesService,
     private profilesService: ProfilesService,
     private categoriesService: CategoriesService,
+    private walletsService: WalletsService,
   ) {}
 
   // creating admin user
@@ -42,6 +44,8 @@ export class UsersService {
       }
 
       await this.categoriesService.createDefaultCategories(adminUser.id);
+
+      await this.walletsService.createInitialWalletsForUser(adminUser.id);
 
       return adminUser;
     } catch (error) {
@@ -80,6 +84,8 @@ export class UsersService {
       }
 
       await this.categoriesService.createDefaultCategories(user.id);
+
+      await this.walletsService.createInitialWalletsForUser(user.id);
 
       return user;
     } catch (error) {

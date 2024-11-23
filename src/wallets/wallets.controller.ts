@@ -16,10 +16,25 @@ import { WalletCreateDto } from './dto/wallet-create.dto';
 import { WalletsService } from './wallets.service';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles-auth.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('wallets')
 export class WalletsController {
   constructor(private walletsService: WalletsService) {}
+
+  @ApiOperation({ summary: 'Получение всех счетов пользователя' })
+  @ApiResponse({ status: 200, type: Wallet })
+  @UseGuards(JwtAuthGuard)
+  @Get('/user-id/:id')
+  async getAllByUser(@Param('id') id: string) {
+    const result = await this.walletsService.getWalletsByUserId(id);
+
+    if (result instanceof HttpException) {
+      throw result;
+    }
+
+    return result;
+  }
 
   @ApiOperation({ summary: 'Получение всех счетов' })
   @ApiResponse({ status: 200, type: Wallet })

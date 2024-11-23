@@ -12,8 +12,10 @@ import { User } from 'src/users/users.model';
 
 interface WalletCreationAttribute {
   userId: string;
-  currency: string;
+  currencyName: string;
   balance: number;
+  walletType: 'card' | 'cash';
+  walletName: string;
 }
 
 @Table({ tableName: 'wallets' })
@@ -33,13 +35,25 @@ export class Wallet extends Model<Wallet, WalletCreationAttribute> {
     type: DataType.STRING,
     allowNull: false,
   })
-  currency: string;
+  currencyName: string;
 
   @Column({
     type: DataType.FLOAT,
     allowNull: false,
   })
   balance: number;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  walletType: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  walletName: string;
 
   @Column({
     type: DataType.BOOLEAN,

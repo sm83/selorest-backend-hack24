@@ -46,6 +46,22 @@ export class CurrenciesService {
     }
   }
 
+  async getCurrencyByName(currencyName: string) {
+    try {
+      const currency = await this.currenciesRepository.findOne({
+        where: { currencyName },
+      });
+
+      if (!currency) {
+        return new HttpException('Currency not found.', HttpStatus.NOT_FOUND);
+      }
+
+      return currency;
+    } catch (error) {
+      return cryptedError(error);
+    }
+  }
+
   async createCurrency(dto: CurrencyCreateDto) {
     try {
       const currency = await this.currenciesRepository.create(dto);
