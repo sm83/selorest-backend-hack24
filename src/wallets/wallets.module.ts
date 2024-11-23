@@ -5,6 +5,7 @@ import { Wallet } from './wallets.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { CurrenciesModule } from 'src/currencies/currencies.module';
 
 @Module({
   controllers: [WalletsController],
@@ -13,6 +14,8 @@ import { AuthModule } from 'src/auth/auth.module';
     SequelizeModule.forFeature([Wallet]),
     forwardRef(() => UsersModule),
     forwardRef(() => AuthModule),
+    forwardRef(() => CurrenciesModule),
   ],
+  exports: [WalletsService],
 })
 export class WalletsModule {}

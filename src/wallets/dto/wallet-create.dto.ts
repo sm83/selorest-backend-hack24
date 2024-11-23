@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString, IsUUID } from 'class-validator';
+import { IsIn, IsNumber, IsString, IsUUID } from 'class-validator';
 
 export class WalletCreateDto {
   @IsString({ message: 'wallet-create: userId: Должно быть строкой' })
@@ -15,7 +15,7 @@ export class WalletCreateDto {
     example: 'rubles',
     description: 'Валюта',
   })
-  readonly currency: string;
+  readonly currencyName: string;
 
   @IsNumber({}, { message: 'wallet-create: balance: Должно быть числом' })
   @ApiProperty({
@@ -23,4 +23,24 @@ export class WalletCreateDto {
     description: 'Стартовый баланс',
   })
   readonly balance: number;
+
+  @IsString({ message: 'wallet-create: walletType: Должно быть строкой' })
+  @IsIn(['cash', 'card'], {
+    message: 'wallet-create: walletType: Должно быть cash либо card',
+  })
+  @ApiProperty({
+    example: 'cash',
+    description: 'cash или card',
+  })
+  readonly walletType: 'cash' | 'card';
+
+  @IsString({ message: 'wallet-create: walletType: Должно быть строкой' })
+  @IsIn(['cash', 'card'], {
+    message: 'wallet-create: walletType: Должно быть cash либо card',
+  })
+  @ApiProperty({
+    example: 'Карта Сбербанк',
+    description: 'Пользовательское название кошелька',
+  })
+  readonly walletName: string;
 }
