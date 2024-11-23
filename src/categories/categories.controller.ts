@@ -60,7 +60,7 @@ export class CategoriesController {
   @Roles('admin')
   @UseGuards(RolesGuard)
   @Get('/id/:id')
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: number) {
     const result = await this.categoriesService.getCategoryById(id);
 
     if (result instanceof HttpException) {
