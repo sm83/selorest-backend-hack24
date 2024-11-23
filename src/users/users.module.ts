@@ -6,6 +6,8 @@ import { User } from './users.model';
 import { RolesModule } from 'src/roles/roles.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { ProfilesModule } from 'src/profiles/profiles.module';
+import { CategoriesModule } from 'src/categories/categories.module';
+import { WalletsModule } from 'src/wallets/wallets.module';
 
 @Module({
   controllers: [UsersController],
@@ -15,6 +17,8 @@ import { ProfilesModule } from 'src/profiles/profiles.module';
     forwardRef(() => RolesModule),
     forwardRef(() => AuthModule),
     forwardRef(() => ProfilesModule),
+    forwardRef(() => CategoriesModule),
+    forwardRef(() => WalletsModule),
   ],
   exports: [UsersService],
 })

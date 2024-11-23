@@ -6,9 +6,14 @@ import {
   Table,
   Model,
   BelongsToMany,
+  HasMany,
+  HasOne,
 } from 'sequelize-typescript';
 import { UserRoles } from 'src/additionalModels/user-roles.model';
+import { Category } from 'src/categories/categories.model';
+import { Profile } from 'src/profiles/profiles.model';
 import { Role } from 'src/roles/roles.model';
+import { Wallet } from 'src/wallets/wallets.model';
 
 interface UserCreationAttribute {
   email: string;
@@ -52,9 +57,12 @@ export class User extends Model<User, UserCreationAttribute> {
   @BelongsToMany(() => Role, () => UserRoles)
   roles: Role[];
 
-  // @HasOne(() => Profile)
-  // profile: Profile;
+  @HasMany(() => Wallet)
+  wallets: Wallet[];
 
-  //   @HasMany(() => Post)
-  //   posts: Post[];
+  @HasMany(() => Wallet)
+  categories: Category[];
+
+  @HasOne(() => Profile)
+  profile: Profile;
 }

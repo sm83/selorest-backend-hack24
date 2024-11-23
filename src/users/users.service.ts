@@ -7,6 +7,8 @@ import { RolesService } from 'src/roles/roles.service';
 import { UserAddRoleDto } from './dto/user-addRole.dto';
 import cryptedError from 'src/utils/throwError';
 import { ProfilesService } from 'src/profiles/profiles.service';
+import { CategoriesService } from 'src/categories/categories.service';
+import { WalletsService } from 'src/wallets/wallets.service';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +16,8 @@ export class UsersService {
     @InjectModel(User) private userRepository: typeof User,
     private roleService: RolesService,
     private profilesService: ProfilesService,
+    private categoriesService: CategoriesService,
+    private walletsService: WalletsService,
   ) {}
 
   // creating admin user
@@ -38,6 +42,10 @@ export class UsersService {
       if (profile instanceof HttpException) {
         return profile as HttpException;
       }
+
+      await this.categoriesService.createDefaultCategories(adminUser.id);
+
+      await this.walletsService.createInitialWalletsForUser(adminUser.id);
 
       return adminUser;
     } catch (error) {
@@ -69,6 +77,15 @@ export class UsersService {
 
       await user.$set('roles', [role.id]);
       user.roles = [role];
+
+      const profile = this.profilesService.createProfile(user.id);
+      if (profile instanceof HttpException) {
+        return profile as HttpException;
+      }
+
+      await this.categoriesService.createDefaultCategories(user.id);
+
+      await this.walletsService.createInitialWalletsForUser(user.id);
 
       return user;
     } catch (error) {
