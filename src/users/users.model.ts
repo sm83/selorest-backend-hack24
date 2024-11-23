@@ -7,8 +7,11 @@ import {
   Model,
   BelongsToMany,
   HasMany,
+  HasOne,
 } from 'sequelize-typescript';
 import { UserRoles } from 'src/additionalModels/user-roles.model';
+import { Category } from 'src/categories/categories.model';
+import { Profile } from 'src/profiles/profiles.model';
 import { Role } from 'src/roles/roles.model';
 import { Wallet } from 'src/wallets/wallets.model';
 
@@ -56,9 +59,10 @@ export class User extends Model<User, UserCreationAttribute> {
 
   @HasMany(() => Wallet)
   wallets: Wallet[];
-  // @HasOne(() => Profile)
-  // profile: Profile;
 
-  //   @HasMany(() => Post)
-  //   posts: Post[];
+  @HasMany(() => Wallet)
+  categories: Category[];
+
+  @HasOne(() => Profile)
+  profile: Profile;
 }

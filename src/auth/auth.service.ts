@@ -110,11 +110,6 @@ export class AuthService {
           return generatedToken as HttpException;
         }
 
-        const profile = this.profilesService.createProfile(user.id);
-        if (profile instanceof HttpException) {
-          return profile as HttpException;
-        }
-
         return { token: generatedToken, id: user.id };
       }
     } catch (error) {
