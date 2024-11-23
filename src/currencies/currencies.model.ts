@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
+import { Category } from 'src/categories/categories.model';
+import { Wallet } from 'src/wallets/wallets.model';
 
 interface CurrencyCreationAttributes {
   currencyName: string;
@@ -37,4 +39,10 @@ export class Currency extends Model<Currency, CurrencyCreationAttributes> {
     defaultValue: false,
   })
   deleted: boolean;
+
+  @HasMany(() => Category)
+  category: Category;
+
+  @HasMany(() => Wallet)
+  wallet: Wallet;
 }

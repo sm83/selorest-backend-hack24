@@ -58,7 +58,7 @@ export class CurrenciesController {
   @UsePipes(ValidationPipe)
   @UseGuards(JwtAuthGuard)
   @Get('/id/:id')
-  async getById(@Param('id') id: string) {
+  async getById(@Param('id') id: number) {
     const result = await this.currenciesService.getCurrencyById(id);
 
     if (result instanceof HttpException) {

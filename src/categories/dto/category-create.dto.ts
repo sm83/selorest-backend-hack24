@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsString, IsUUID } from 'class-validator';
+import { IsIn, IsNumber, IsString, IsUUID } from 'class-validator';
 
 export class CategoryCreateDto {
   @IsString({ message: 'wallet-create: userId: Должно быть строкой' })
@@ -16,6 +16,20 @@ export class CategoryCreateDto {
     description: 'Название категории',
   })
   readonly categoryName: string;
+
+  @IsNumber({}, { message: 'wallet-create: currency: Должно быть числом' })
+  @ApiProperty({
+    example: '1',
+    description: 'Идентификатор валюты',
+  })
+  readonly currency: number;
+
+  @IsNumber({}, { message: 'wallet-create: balance: Должно быть числом' })
+  @ApiProperty({
+    example: '100.05',
+    description: 'Стартовый баланс',
+  })
+  readonly balance: number;
 
   @IsString({
     message: 'category-create: categoryPriority: должно быть строкой',

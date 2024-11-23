@@ -18,7 +18,6 @@ export class AppService implements OnModuleInit {
 
   private async initializeData() {
     const createRolesAndUsers = async () => {
-      // Проверка существования ролей
       const roles = await this.rolesService.getAllRoles();
 
       if (roles instanceof HttpException) {
@@ -38,7 +37,6 @@ export class AppService implements OnModuleInit {
           printManualLog('Admin and User roles created.');
         }
 
-        // Проверка существования пользователей
         const users = await this.usersService.getAllUsers();
         if (users.length === 0) {
           await this.usersService.createAdminUser({
@@ -51,7 +49,6 @@ export class AppService implements OnModuleInit {
       }
     };
 
-    // Проверка существования валют (в частности хотя бы рублевой)
     const currencies = await this.currenciesService.getAvaliableCurrencies();
 
     if (currencies instanceof HttpException) {
@@ -63,11 +60,11 @@ export class AppService implements OnModuleInit {
             currencyName: 'RUB',
             currencySymbol: '₽',
           })
-          .then(() => {
+          .then(async () => {
             // а здесь делаем роли и юзеров.
             // можно было красивее но бытие сказало нет.
 
-            createRolesAndUsers();
+            await createRolesAndUsers();
           });
 
         printManualLog('Rouble currency created.');

@@ -11,6 +11,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Wallet } from './wallets.model';
 import { UsersService } from 'src/users/users.service';
 import { CurrenciesService } from 'src/currencies/currencies.service';
+import { WalletChangeBalanceDto } from './dto/wallet-changeBalance.dto';
 
 @Injectable()
 export class WalletsService {
@@ -82,8 +83,8 @@ export class WalletsService {
         return user as HttpException;
       }
 
-      const currency = await this.currenciesService.getCurrencyByName(
-        dto.currencyName,
+      const currency = await this.currenciesService.getCurrencyById(
+        dto.currency,
       );
 
       if (currency instanceof HttpException) {
@@ -111,14 +112,14 @@ export class WalletsService {
       const initialWalletsSchema: WalletCreateDto[] = [
         {
           balance: 0,
-          currencyName: 'RUB',
+          currency: 1,
           userId: user.id,
           walletType: 'cash',
           walletName: 'Наличные',
         },
         {
           balance: 0,
-          currencyName: 'RUB',
+          currency: 1,
           userId: user.id,
           walletType: 'card',
           walletName: 'Карта',
@@ -135,6 +136,41 @@ export class WalletsService {
           initialWallets.push(result);
         }
       });
+
+      return initialWallets;
+    } catch (error) {
+      return cryptedError(error);
+    }
+  }
+
+  async changeWalletBalance(dto: WalletChangeBalanceDto) {
+    try {
+      const wallet = await this.walletRepository.findOne({
+        where: { id: dto.walletId },
+      });
+
+      if (wallet instanceof HttpException) {
+        return wallet as HttpException;
+      }
+
+      if (wallet.deleted) {
+        return new HttpException('Wallet was deleted.', HttpStatus.GONE);
+      }
+
+      if (wallet.currency !== dto.currencyId) {
+        return new HttpException(
+          'Currencies are diferent.',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      if (dto.type === 'add') {
+        wallet.balance += dto.amount;
+      } else {
+        wallet.balance -= dto.amount;
+      }
+
+      return await wallet.save();
     } catch (error) {
       return cryptedError(error);
     }
