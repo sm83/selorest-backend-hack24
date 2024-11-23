@@ -2,12 +2,14 @@ import { HttpException, Injectable, OnModuleInit } from '@nestjs/common';
 import { UsersService } from './users/users.service';
 import { RolesService } from './roles/roles.service';
 import { printManualLog } from './utils/manualLog';
+import { CurrenciesService } from './currencies/currencies.service';
 
 @Injectable()
 export class AppService implements OnModuleInit {
   constructor(
     private readonly usersService: UsersService,
     private readonly rolesService: RolesService,
+    private readonly currenciesService: CurrenciesService,
   ) {}
 
   async onModuleInit() {
@@ -19,7 +21,7 @@ export class AppService implements OnModuleInit {
     const roles = await this.rolesService.getAllRoles();
 
     if (roles instanceof HttpException) {
-      console.error('roles is HttpException');
+      console.error('initializeData: roles is HttpException');
     } else {
       if (roles.length === 0) {
         await this.rolesService.createRole({
@@ -44,6 +46,22 @@ export class AppService implements OnModuleInit {
         });
 
         printManualLog('Admin user created.');
+      }
+    }
+
+    // Проверка существования валют (в частности хотя бы рублевой)
+    const currencies = await this.currenciesService.getAvaliableCurrencies();
+
+    if (currencies instanceof HttpException) {
+      console.error('initializeData: currencies is HttpException');
+    } else {
+      if (currencies.length === 0) {
+        await this.currenciesService.createCurrency({
+          currencyName: 'RUB',
+          currencySymbol: '₽',
+        });
+
+        printManualLog('Rouble currency created.');
       }
     }
   }

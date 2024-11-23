@@ -4,7 +4,6 @@ import cryptedError from 'src/utils/throwError';
 import { InjectModel } from '@nestjs/sequelize';
 import { Wallet } from './wallets.model';
 import { UsersService } from 'src/users/users.service';
-import { printManualLog } from 'src/utils/manualLog';
 
 @Injectable()
 export class WalletsService {
@@ -40,7 +39,7 @@ export class WalletsService {
       const wallet = await this.walletRepository.findByPk(id);
 
       if (!wallet) {
-        return new HttpException('User not found.', HttpStatus.NOT_FOUND);
+        return new HttpException('Wallet not found.', HttpStatus.NOT_FOUND);
       }
 
       return wallet;
@@ -72,9 +71,6 @@ export class WalletsService {
       if (!wallet) {
         return new HttpException('Wallet not found', HttpStatus.NOT_FOUND);
       }
-
-      printManualLog('wallet deleted');
-      console.log(wallet.deleted);
 
       if (wallet.deleted) {
         return new HttpException('Already deleted.', HttpStatus.GONE);

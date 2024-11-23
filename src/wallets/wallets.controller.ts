@@ -54,7 +54,7 @@ export class WalletsController {
   }
 
   @ApiOperation({ summary: 'Получение счет по id' })
-  @ApiResponse({ status: 200, type: [Wallet] })
+  @ApiResponse({ status: 200, type: Wallet })
   @UsePipes(ValidationPipe)
   @Roles('admin')
   @UseGuards(RolesGuard)
@@ -86,7 +86,7 @@ export class WalletsController {
   }
 
   @ApiOperation({ summary: 'Удаление счета' })
-  @ApiResponse({ status: 409, type: Wallet })
+  @ApiResponse({ status: 200, type: Wallet })
   @Roles('admin')
   @UseGuards(RolesGuard)
   @UsePipes(ValidationPipe)

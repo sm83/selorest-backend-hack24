@@ -14,6 +14,8 @@ import { WalletsModule } from './wallets/wallets.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { Transaction } from './transactions/transactions.model';
 import { Wallet } from './wallets/wallets.model';
+import { CurrenciesModule } from './currencies/currencies.module';
+import { Currency } from './currencies/currencies.model';
 
 @Module({
   imports: [
@@ -27,7 +29,7 @@ import { Wallet } from './wallets/wallets.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, UserRoles, Transaction, Wallet],
+      models: [User, Role, UserRoles, Transaction, Wallet, Currency],
       autoLoadModels: true,
     }),
     UsersModule,
@@ -37,6 +39,7 @@ import { Wallet } from './wallets/wallets.model';
     TestsModule,
     WalletsModule,
     TransactionsModule,
+    CurrenciesModule,
   ],
   providers: [AppService],
 })
