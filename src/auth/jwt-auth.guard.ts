@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
+import { printManualLog } from 'src/utils/manualLog';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -26,11 +27,15 @@ export class JwtAuthGuard implements CanActivate {
       const token = authHeader.split(' ')[1];
 
       if (bearer !== 'Bearer' || !token) {
+        printManualLog('here1');
         throw new UnauthorizedException();
       } else {
+        printManualLog('here2');
         const user = this.jwtService.verify(token, {
           secret: process.env.JWT_PRIVATE_KEY,
         });
+
+        console.log(user);
 
         req.user = user;
         return true;

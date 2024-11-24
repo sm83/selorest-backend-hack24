@@ -75,8 +75,7 @@ export class CategoriesController {
   @ApiOperation({ summary: 'Получение категорий пользователя по id' })
   @ApiResponse({ status: 200, type: Category })
   @UsePipes(ValidationPipe)
-  @Roles('admin')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('/user-id/:id')
   async getAllByUserId(@Param('id') id: string) {
     const result = await this.categoriesService.getAllCategoriesByUserId(id);
