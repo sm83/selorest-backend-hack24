@@ -62,6 +62,16 @@ export class Category extends Model<Category, CategoryCreationAttribute> {
   })
   balance: number;
 
+  @ApiProperty({
+    example: '2',
+    description: 'id иконки',
+  })
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  icon: number;
+
   @Column({
     type: DataType.BOOLEAN,
     defaultValue: false,
