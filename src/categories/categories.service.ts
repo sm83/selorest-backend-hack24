@@ -13,6 +13,7 @@ import cryptedError from 'src/utils/throwError';
 import { CategoryCreateDto } from './dto/category-create.dto';
 import { CategoryChangeBalanceDto } from './dto/category-changeBalance.dto';
 import { printManualLog } from 'src/utils/manualLog';
+import { CategoryUpdateDto } from './dto/category-update.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -184,6 +185,24 @@ export class CategoriesService {
     }
   }
 
+  async changeCategory(id: number, dto: CategoryUpdateDto) {
+    try {
+      const category = await this.categoryRepository.findByPk(id);
+
+      if (category instanceof HttpException) {
+        return category as HttpException;
+      }
+
+      category.categoryName = dto.categoryName;
+      category.balance = dto.balance;
+      category.categoryPriority = dto.categoryPriority;
+
+      return await category.save();
+    } catch (error) {
+      return cryptedError(error);
+    }
+  }
+
   async changeCategoryBalance(dto: CategoryChangeBalanceDto) {
     try {
       const category = await this.categoryRepository.findOne({
@@ -217,7 +236,7 @@ export class CategoriesService {
     }
   }
 
-  async deleteCategory(id: string) {
+  async deleteCategory(id: number) {
     try {
       const category = await this.categoryRepository.findOne({ where: { id } });
 

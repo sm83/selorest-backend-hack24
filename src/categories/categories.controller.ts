@@ -5,6 +5,7 @@ import {
   Get,
   HttpException,
   Param,
+  Patch,
   Post,
   UseGuards,
   UsePipes,
@@ -17,6 +18,7 @@ import { CategoryCreateDto } from './dto/category-create.dto';
 import { CategoriesService } from './categories.service';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { CategoryUpdateDto } from './dto/category-update.dto';
 
 @Controller('categories')
 export class CategoriesController {
@@ -101,13 +103,28 @@ export class CategoriesController {
     return result;
   }
 
+  @ApiOperation({ summary: 'Изменение категории' })
+  @ApiResponse({ status: 201, type: Category })
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(ValidationPipe)
+  @Patch('/id/:id')
+  async patch(@Param('id') id: number, @Body() dto: CategoryUpdateDto) {
+    const result = await this.categoriesService.changeCategory(id, dto);
+
+    if (result instanceof HttpException) {
+      throw result;
+    }
+
+    return result;
+  }
+
   @ApiOperation({ summary: 'Удаление категории' })
   @ApiResponse({ status: 200, type: Category })
   @Roles('admin')
   @UseGuards(RolesGuard)
   @UsePipes(ValidationPipe)
   @Delete('/id/:id')
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id') id: number) {
     const result = await this.categoriesService.deleteCategory(id);
 
     if (result instanceof HttpException) {
