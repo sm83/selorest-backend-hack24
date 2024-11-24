@@ -57,11 +57,41 @@ export class TransactionsController {
   @ApiOperation({ summary: 'Получение транзакции по id' })
   @ApiResponse({ status: 200, type: Transaction })
   @UsePipes(ValidationPipe)
-  @Roles('admin')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('/id/:id')
   async getById(@Param('id') id: string) {
     const result = await this.transactionsService.getTransactionById(id);
+
+    if (result instanceof HttpException) {
+      throw result;
+    }
+
+    return result;
+  }
+
+  @ApiOperation({ summary: 'Получение транзакций по id категории' })
+  @ApiResponse({ status: 200, type: [Transaction] })
+  @UsePipes(ValidationPipe)
+  @UseGuards(JwtAuthGuard)
+  @Get('/category-id/:id')
+  async getByCategoryId(@Param('id') id: string) {
+    const result =
+      await this.transactionsService.getTransactionsByCategoryId(id);
+
+    if (result instanceof HttpException) {
+      throw result;
+    }
+
+    return result;
+  }
+
+  @ApiOperation({ summary: 'Получение транзакций по id счета' })
+  @ApiResponse({ status: 200, type: [Transaction] })
+  @UsePipes(ValidationPipe)
+  @UseGuards(JwtAuthGuard)
+  @Get('/wallet-id/:id')
+  async getByWalletId(@Param('id') id: string) {
+    const result = await this.transactionsService.getTransactionsByWalletId(id);
 
     if (result instanceof HttpException) {
       throw result;
@@ -89,8 +119,7 @@ export class TransactionsController {
 
   @ApiOperation({ summary: 'Удаление категории' })
   @ApiResponse({ status: 200, type: Transaction })
-  @Roles('admin')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   @Delete('/id/:id')
   async delete(@Param('id') id: string) {

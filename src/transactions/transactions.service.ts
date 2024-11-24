@@ -56,6 +56,44 @@ export class TransactionsService {
     }
   }
 
+  async getTransactionsByWalletId(walletId: string) {
+    try {
+      const transaction = await this.transactionRepository.findAll({
+        where: { walletId: walletId, deleted: false },
+      });
+
+      if (!transaction) {
+        return new HttpException(
+          'Transaction not found.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      return transaction;
+    } catch (error) {
+      return cryptedError(error);
+    }
+  }
+
+  async getTransactionsByCategoryId(categoryId: string) {
+    try {
+      const transaction = await this.transactionRepository.findAll({
+        where: { categoryId: categoryId, deleted: false },
+      });
+
+      if (!transaction) {
+        return new HttpException(
+          'Transaction not found.',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      return transaction;
+    } catch (error) {
+      return cryptedError(error);
+    }
+  }
+
   // создание транзакции
   async createTransaction(dto: TransactionCreateDto) {
     try {
