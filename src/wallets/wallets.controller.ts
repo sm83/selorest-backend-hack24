@@ -86,8 +86,7 @@ export class WalletsController {
 
   @ApiOperation({ summary: 'Создание счета' })
   @ApiResponse({ status: 201, type: Wallet })
-  @Roles('admin')
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   @Post()
   async create(@Body() dto: WalletCreateDto) {

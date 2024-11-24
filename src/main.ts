@@ -10,8 +10,8 @@ async function start() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: '*',
-    methods: 'GET,POST,PUT,DELETE,UPDATE',
+    origin: 'https://petrovich-server-test.ru',
+    methods: 'GET,POST,PUT,DELETE,UPDATE,PATCH',
     allowedHeaders: 'Content-Type, Authorization',
   });
 
