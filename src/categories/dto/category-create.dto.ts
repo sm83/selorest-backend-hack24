@@ -31,6 +31,13 @@ export class CategoryCreateDto {
   })
   readonly balance: number;
 
+  @IsNumber({}, { message: 'wallet-create: icon: Должно быть числом' })
+  @ApiProperty({
+    example: '2',
+    description: 'ID иконки категории (mock на фронте)',
+  })
+  readonly icon?: number;
+
   @IsString({
     message: 'category-create: categoryPriority: должно быть строкой',
   })

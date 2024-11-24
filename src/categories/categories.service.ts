@@ -103,17 +103,13 @@ export class CategoriesService {
 
       printManualLog('here');
 
-      const result = await this.createCategory({
+      await this.createCategory({
         userId,
         currency: 1,
         balance: 0,
         categoryName: 'Цели',
         categoryPriority: 'primary',
       });
-
-      if (result instanceof HttpException) {
-        return result;
-      }
 
       await this.createCategory({
         userId,
@@ -126,6 +122,7 @@ export class CategoriesService {
       await this.createCategory({
         userId,
         currency: 1,
+        icon: 2,
         balance: 0,
         categoryName: 'Продукты',
         categoryPriority: 'secondary',
@@ -134,6 +131,7 @@ export class CategoriesService {
       await this.createCategory({
         userId,
         currency: 1,
+        icon: 4,
         balance: 0,
         categoryName: 'Здоровье',
         categoryPriority: 'secondary',
@@ -142,6 +140,7 @@ export class CategoriesService {
       await this.createCategory({
         userId,
         currency: 1,
+        icon: 3,
         balance: 0,
         categoryName: 'Семья',
         categoryPriority: 'secondary',
@@ -150,14 +149,16 @@ export class CategoriesService {
       await this.createCategory({
         userId,
         currency: 1,
+        icon: 8,
         balance: 0,
-        categoryName: 'Транспорт',
+        categoryName: 'Питомцы',
         categoryPriority: 'secondary',
       });
 
       await this.createCategory({
         userId,
         currency: 1,
+        icon: 7,
         balance: 0,
         categoryName: 'Покупки',
         categoryPriority: 'secondary',
@@ -166,6 +167,7 @@ export class CategoriesService {
       await this.createCategory({
         userId,
         currency: 1,
+        icon: 5,
         balance: 0,
         categoryName: 'Кафе',
         categoryPriority: 'other',
@@ -174,6 +176,7 @@ export class CategoriesService {
       await this.createCategory({
         userId,
         currency: 1,
+        icon: 6,
         balance: 0,
         categoryName: 'Досуг',
         categoryPriority: 'other',
