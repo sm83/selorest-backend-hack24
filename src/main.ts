@@ -11,7 +11,7 @@ async function start() {
 
   app.enableCors({
     origin: '*',
-    methods: 'GET,POST,PUT,DELETE,UPDATE',
+    methods: 'GET,POST,PUT,DELETE,UPDATE,PATCH',
     allowedHeaders: 'Content-Type, Authorization',
   });
 
