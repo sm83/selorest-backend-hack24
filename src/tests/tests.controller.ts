@@ -28,6 +28,13 @@ export class TestsController {
     return result;
   }
 
+  @Get('/where')
+  getRequestOrigin(@Req() request: Request): string {
+    const origin = request.headers.origin; // Здесь будет домен источника
+    console.log(`Request origin: ${origin}`);
+    return `Request came from: ${origin}`;
+  }
+
   @ApiOperation({ summary: 'Тестирование cookie' })
   @ApiResponse({ status: 200 })
   @UsePipes(ValidationPipe)
