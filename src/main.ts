@@ -10,7 +10,7 @@ async function start() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: 'http://localhost',
+    origin: 'https://localhost',
     methods: 'GET,POST,PUT,DELETE,UPDATE,PATCH',
     allowedHeaders: 'Content-Type, Authorization',
   });
